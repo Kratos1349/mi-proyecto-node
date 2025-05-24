@@ -1,5 +1,5 @@
 const AdminJS = require('adminjs')
-const AdminJSExpress = require('@adminjs/express')
+const { default: AdminJSExpress } = require('@adminjs/express');
 const AdminJSTypeORM = require('@adminjs/typeorm')
 const express = require('express')
 const AppDataSource = require('./data-source')
