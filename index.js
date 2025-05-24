@@ -1,10 +1,24 @@
 require('dotenv').config();
 const express = require('express');
+const AdminJS = require('adminjs');
+const AdminJSExpress = require('@adminjs/express');
+const AdminJSMysql = require('@adminjs/mysql2');
 const db = require('./db');
+
+AdminJS.registerAdapter(AdminJSMysql);
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+const adminJs = new AdminJS({
+  databases: [db],
+  rootPath: '/admin',
+});
+
+const adminRouter = AdminJSExpress.buildRouter(adminJs);
+app.use(adminJs.options.rootPath, adminRouter);
+
+// Ruta de ejemplo para consultar la hora
 app.get('/', (req, res) => {
   db.query('SELECT NOW() AS ahora', (err, results) => {
     if (err) {
@@ -17,4 +31,5 @@ app.get('/', (req, res) => {
 
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en puerto ${PORT}`);
+  console.log(`AdminJS disponible en http://localhost:${PORT}/admin`);
 });
